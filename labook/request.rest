@@ -1,0 +1,29 @@
+GET http://localhost:3003/users/getAll
+Content-Type: application/json
+
+###
+POST http://localhost:3003/users/create
+Content-Type: application/json
+
+{
+    "name": "Diandrey Ecker",
+    "email": "diandrey1@teste.com",
+    "password": "eddad1afadsvaevaefv"
+}
+
+###
+
+POST http://localhost:3003/post/create
+Content-Type: application/json
+
+{
+    "photo": "foto2",
+    "description": "descrição2",
+    "type": "normal",
+    "authorId": "993cc4f2-f959-48f2-bc86-5ecdecafe44f"
+}
+
+###
+
+GET http://localhost:3003/post/getall
+Content-Type: application/json
