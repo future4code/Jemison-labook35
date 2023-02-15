@@ -1,53 +1,45 @@
+import { Post } from '../model/post';
 import { BaseDatabase } from './BaseDatabase';
-import { post } from '../model/post'
 
 export class PostDatabase extends BaseDatabase {
 
     private postTable = 'labook_posts'
 
-    public createPost = async (post: post) => {
+    public createPost = async (post: Post) => {
         try {
-            PostDatabase.connection.initialize()
-            await PostDatabase.connection.insert({
-                id: post.id,
-                photo: post.photo,
-                description: post.description,
-                type: post.type,
-                author_id: post.authorId
-            }).into(this.postTable)
+            await PostDatabase.connection(this.postTable).insert(post)
         } catch (error: any) {
             throw new Error(error.message)
-        } finally {
-            console.log('Conexão Encerrada!');
-            PostDatabase.connection.destroy();
         }
     }
 
-    public getPosts = async () => {
+
+
+    public getAllPosts = async () => {
 
         try {
-            PostDatabase.connection.initialize()
-            const allPosts = await PostDatabase.connection.select().from(this.postTable)
 
+            const allPosts: Post[] = await PostDatabase.connection.select('*').from(this.postTable)
             return allPosts;
+
         } catch (error: any) {
             throw new Error(error.message);
-        } finally {
-            console.log("Conexão Encerrada!")
-            PostDatabase.connection.destroy();
         }
     }
 
-    public getPostId = async (id: string) => {
-        try {
-            PostDatabase.connection.initialize()
-            const allPostsId = await PostDatabase.connection.select('*').where({id}).from(this.postTable)
-            return allPostsId
-        } catch (error: any) {
-            throw new Error(error.message);
-        } finally {
-            console.log("conexão encerrada!");
-            PostDatabase.connection.destroy();
-        }
-    }
+
+
+
+    // public getPostId = async (id: string) => {
+    //     try {
+    //         PostDatabase.connection.initialize()
+    //         const allPostsId = await PostDatabase.connection.select('*').where({ id }).from(this.postTable)
+    //         return allPostsId
+    //     } catch (error: any) {
+    //         throw new Error(error.message);
+    //     } finally {
+    //         console.log("conexão encerrada!");
+    //         PostDatabase.connection.destroy();
+    //     }
+    // }
 }

@@ -1,3 +1,4 @@
+import { User, UserCreateInputDTO } from '../model/user';
 import { UserDatabase } from './../data/UserDatabase';
 import { IdGenerator } from './../services/IdGeneration';
 
@@ -5,28 +6,23 @@ export class UserBusiness {
 
     userDatabase = new UserDatabase
 
-    public createUser = async (input: any) => {
-
+    public createUser = async (input: UserCreateInputDTO) => {
         try {
-            const { name, email, password } = input
-
             if (
-                !name ||
-                !email ||
-                !password
+                !input.getName ||
+                !input.getEmail ||
+                !input.getPassword
             ) {
                 throw new Error("Preencha todos os campos");
             }
-
             const id = IdGenerator.generateId()
 
-            await this.userDatabase.createUser({
-                id,
-                name,
-                email,
-                password
-            })
+            const user: User = new User(
+                input.getEmail(),
+                input.getName(),
+                input.getPassword(), id)
 
+            await this.userDatabase.createUser(user)
         } catch (error: any) {
             throw new Error(error.message);
         }
@@ -35,8 +31,8 @@ export class UserBusiness {
     public getUsers = async () => {
 
         try {
-            console.log("Tudo Certo")
-            return await this.userDatabase.getUsers()
+            const users: User[] = await this.userDatabase.getUsers()
+            return (users)
 
         } catch (error: any) {
             throw new Error(error.message);

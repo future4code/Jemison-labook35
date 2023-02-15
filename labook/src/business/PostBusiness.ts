@@ -1,65 +1,58 @@
 
+import { Post, PostCreateInputDTO } from '../model/post';
 import { IdGenerator } from '../services/IdGeneration';
 import { PostDatabase } from './../data/PostDatabase';
 
 export class PostBusiness {
-
    postDatabase = new PostDatabase
 
-   public createPost = async (input: any) => {
+   public createPost = async (input: PostCreateInputDTO) => {
 
       try {
-
-         const { photo, description, type, authorId } = input
-
          if (
-            !photo ||
-            !description ||
-            !type ||
-            !authorId
+            !input.photo ||
+            !input.description ||
+            !input.type ||
+            !input.authorId
          ) {
-            throw new Error('Preencha os campos "photo","description", "type" e "authorId"')
+            throw new Error("Preencha todos os campos!");
          }
 
          const id = IdGenerator.generateId()
-         const createdAt = new Date()
+         // const createdAt = new Date()
+         const post: Post = new Post(id, input.photo, input.description, input.type, input.createdAt, input.authorId)
 
-         await this.postDatabase.createPost({
-            id,
-            photo,
-            description,
-            type,
-            createdAt,
-            authorId
-         })
-
+         await this.postDatabase.createPost(post)
       } catch (error: any) {
          throw new Error(error.message)
       }
    }
 
-   public getPosts = async () => {
+
+
+   public getAllPosts = async () => {
 
       try {
-         console.log("Tudo Certo")
-         return await this.postDatabase.getPosts()
+         const posts: Post[] = await this.postDatabase.getAllPosts()
+         return (posts)
 
       } catch (error: any) {
          throw new Error(error.message);
       }
    }
 
-   public getPostId = async (id: string) => {
 
-      try {
-         
-         console.log('Tudo Certo')
-         return await this.postDatabase.getPostId()
-      }catch (error: any) {
-         throw new Error(error.message);
-      }
-   }
 
+   //business
+   // public getPostId = async (id: string) => {
+
+   //    try {
+   //       return await this.postDatabase.getPostId(id)
+   //    } catch (error: any) {
+   //       throw new Error(error.message);
+   //    }
+   // }
+}
 
    //    getPostsId = async (req: Request, res: Response) => {
 
@@ -92,4 +85,3 @@ export class PostBusiness {
    //           res.send({ message })
    //       }
    //   }
-}

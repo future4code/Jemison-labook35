@@ -6,9 +6,9 @@ POST http://localhost:3003/users/create
 Content-Type: application/json
 
 {
-    "name": "Diandrey Ecker",
-    "email": "diandrey1@teste.com",
-    "password": "eddad1afadsvaevaefv"
+    "name": "Diandrey C Ecker",
+    "email": "diandrey2@teste.com",
+    "password": "eddad1afadsvadevaefv"
 }
 
 ###

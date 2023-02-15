@@ -8,4 +8,4 @@ export const postRouter = express.Router();
 
 postRouter.post("/create", postController.createPost)
 
-postRouter.get('/getall', postController.getPosts)
+postRouter.get('/getall', postController.getAllPosts)

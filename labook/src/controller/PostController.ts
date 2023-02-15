@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { PostBusiness } from "../business/PostBusiness"
+import { Post, PostCreateInputDTO } from "../model/post";
 
 export class PostController {
 
@@ -7,13 +8,9 @@ export class PostController {
 
     public createPost = async (req: Request, res: Response) => {
         try {
-            const input = {
-                photo: req.body.photo,
-                description: req.body.description,
-                type: req.body.type,
-                createdAt: req.body.createdAt,
-                authorId: req.body.authorId
-            }
+
+            const { photo, description, type, createAd, authorId } = req.body
+            const input = new PostCreateInputDTO(photo, description, type, createAd, authorId)
 
             await this.postBusiness.createPost(input)
 
@@ -23,27 +20,33 @@ export class PostController {
         }
     }
 
-    public getPosts = async (req: Request, res: Response) => {
+
+
+    public getAllPosts = async (req: Request, res: Response) => {
 
         try {
-            const posts = await this.postBusiness.getPosts()
-
+            const posts: Post[] = await this.postBusiness.getAllPosts()
             res.status(201).send(posts)
+
         } catch (error: any) {
             res.status(400).send(error.message)
         }
     }
 
-    public getPostsId = async (req: Request, res: Response) => {
 
-        try {
 
-            const id = req.params.id
-            const postsId = await this.postBusiness.getPostId(id)
+    // public getPostsId = async (req: Request, res: Response) => {
 
-            res.status(201).send(postsId)
-        } catch (error: any) {
-            res.status(400).send(error.message || 400).send(error.message || error.sqlMessage)
-        }
-    }
+    //     try {
+
+    //         const id = req.params.id
+
+    //         const postsId = await this.postBusiness.getPostId(id)
+
+    //         res.status(201).send(postsId)
+
+    //     } catch (error: any) {
+    //         res.status(400).send(error.message || 400).send(error.message || error.sqlMessage)
+    //     }
+    // }
 }
